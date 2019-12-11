@@ -14,7 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace AspNetCoreTodo
-{
+{//just a test
     public class Startup
     {
         public Startup(IConfiguration configuration)
