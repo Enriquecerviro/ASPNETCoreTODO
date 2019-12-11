@@ -39,6 +39,7 @@ namespace AspNetCoreTodo.Controllers
             _todoItemService = todoItemService;
         }
        
+        
         public async Task<IActionResult> Index()
         {
             var items = await _todoItemService.GetIncompleteItemsAsync();
@@ -48,7 +49,22 @@ namespace AspNetCoreTodo.Controllers
                 Items = items
             };
             return View(model);
+        }
 
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddItem(TodoItem newItem)
+        {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("Index");
+            }
+            var successful = await _todoItemService.AddItemAsync(newItem);
+
+            if (!successful)
+            {
+                return BadRequest("couldnt add item");
+            }
+            return RedirectToAction("Index");
         }
     }
 }

@@ -1,4 +1,6 @@
 ﻿@model TodoViewModel
+ AspNetCoreTodo.Models.DatePicker
+
 @using Humanizer
 @{
     ViewData["Title"] = "Organiza tus To-dos, pls.";
@@ -25,6 +27,8 @@
         }
     </table>
     <div class="panel-footer add-item-form">
-        <!-- TODO: Add item form -->
+        @await Html.PartialAsync("AddItemPartial", new TodoItem())
+        @await Html.PartialAsync("DatePicker")
     </div>
+
 </div>
