@@ -1,6 +1,9 @@
 ﻿using AspNetCoreTodo.Models;
 using AspNetCoreTodo.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace AspNetCoreTodo.Controllers
@@ -13,6 +16,7 @@ namespace AspNetCoreTodo.Controllers
 //Este controlador se encargará de recibir los objetos to-do de la DB, ponerlos en el modelo de tal manera que la vista lo entienda
 //y devolver la vista al buscador del usuario.
 {
+    [Authorize]
     /// <summary>
     /// Como este controlador solo depende de la interfaz que a su vez es "un array de objetos Todo" y no depende
     /// de una clase en especifico le da igual cual sea la clase, siempre y cuando coincida
@@ -27,6 +31,8 @@ namespace AspNetCoreTodo.Controllers
         /// </summary>
         private readonly ITodoItemService _todoItemService;
 
+        private readonly UserManager<ApplicationUser> _userManager;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TodoController"/> class.
         /// Este constructor me permite crear una nueva instancia de la clase, lo consigo
@@ -34,7 +40,8 @@ namespace AspNetCoreTodo.Controllers
         /// que para crear un Todocontroller vamos a necesitar un objeto que coincida con la interfaz.
         /// </summary>
         /// <param name="todoItemService">The todo item service.</param>
-        public TodoController(ITodoItemService todoItemService)
+        public TodoController(ITodoItemService todoItemService,
+            UserManager<ApplicationUser> userManager)
         {
             _todoItemService = todoItemService;
         }
@@ -81,6 +88,30 @@ namespace AspNetCoreTodo.Controllers
             if (!successful)
             {
                 return BadRequest("couldnt add item");
+            }
+            return RedirectToAction("Index");
+        }
+        /// <summary>
+        /// Marks the done.
+        /// Since you aren't using model binding, there's no ModelState to check for
+        /// validity.Instead, you can check the guid value directly to make sure it's
+        /// valid.If for some reason the id parameter in the request was missing or
+        /// couldn't be parsed as a guid, id will have a value of Guid.Empty . If
+        /// that's the case, the action tells the browser to redirect to /Todo/Index and refresh the page.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns></returns>
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> MarkDone(Guid id)
+        {
+            if( id == Guid.Empty)
+            {
+                return RedirectToAction("Index");
+            }
+            var successful = await _todoItemService.MarkDoneAsync(id);
+            if (!successful)
+            {
+                return BadRequest("couldnt load a shit");
             }
             return RedirectToAction("Index");
         }

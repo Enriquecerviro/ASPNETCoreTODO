@@ -25,8 +25,15 @@
         {
             <tr>
                 
-                <td>
-                    <input type="checkbox" class="done-checkbox" />
+                <td><!--
+                    Aqui el foreach recorerrá y pintara en una linea por elemento los "to-do". El hidden input que tiene
+                        los ids es necesario para que el controlador sepa qué caja está marcada.(si no habria que decirle que una caja fue marcada, pero cual?)
+                    -->
+                    <form asp-action="Markdone" method="post">
+                        <input type="checkbox" class="done-checkbox" />
+                        <input type="hidden" name="id" value="@item.Id"/>
+                    </form>
+
                 </td>
                 <td>@item.Title</td>
                 <td>@item.DueAt.Humanize()</td>
