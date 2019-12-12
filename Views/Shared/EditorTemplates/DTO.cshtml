@@ -1,0 +1,15 @@
+﻿@model DateTime?
+@*@if (Model != null)
+    {
+    <input type="date" name="@ViewData.ModelMetadata.PropertyName" value="@Convert.ToDateTime(Model).ToString(" yyyy-MM-dd")" />
+
+    }
+    else
+    {
+    <input type="date" name="@ViewData.ModelMetadata.PropertyName" />
+
+    }*@
+@{
+    var htmlAttributes = new { type = "date", @class = "form-control", placeholder = ViewData.ModelMetadata.PropertyName };
+}
+@Html.TextBox("", Model?.ToString("yyyy-MM-dd"), htmlAttributes)

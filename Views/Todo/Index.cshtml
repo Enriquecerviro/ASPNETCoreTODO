@@ -1,5 +1,4 @@
 ﻿@model TodoViewModel
- AspNetCoreTodo.Models.DatePicker
 
 @using Humanizer
 @{
@@ -7,6 +6,13 @@
 }
 <div class="panel panel-default todo-panel">
     <div class="panel-heading">@ViewData["Title"]</div>
+    @*@using (Html.BeginForm())
+        {
+
+            @Html.EditorForModel()
+            <br />
+            <input type="submit" value="submit" />
+        }*@
     <table class="table table-hover">
         <thead>
             <tr>
@@ -18,17 +24,17 @@
         @foreach (var item in Model.Items)
         {
             <tr>
+                
                 <td>
                     <input type="checkbox" class="done-checkbox" />
                 </td>
                 <td>@item.Title</td>
                 <td>@item.DueAt.Humanize()</td>
+                
             </tr>
         }
     </table>
     <div class="panel-footer add-item-form">
         @await Html.PartialAsync("AddItemPartial", new TodoItem())
-        @await Html.PartialAsync("DatePicker")
     </div>
-
 </div>

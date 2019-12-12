@@ -34,13 +34,14 @@ namespace AspNetCoreTodo.Models
         /// </value>
         [Required]
         public string Title { get; set; }
+
         /// <summary>
-        /// Gets or sets the due at. Esta es una propiedad de C# que permite almacenar date/time stamp con la timezone en modo offset.
-        /// Como se indica puede ser nulo o indefinido.
+        /// Gets or sets the due at.
         /// </summary>
         /// <value>
         /// The due at.
         /// </value>
+        [UIHint("DTO")]
         public DateTimeOffset? DueAt { get; set; }
     }
 }

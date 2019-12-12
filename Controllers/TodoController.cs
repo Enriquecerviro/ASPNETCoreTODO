@@ -38,8 +38,11 @@ namespace AspNetCoreTodo.Controllers
         {
             _todoItemService = todoItemService;
         }
-       
-        
+
+        /// <summary>
+        /// Indexes this instance.
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> Index()
         {
             var items = await _todoItemService.GetIncompleteItemsAsync();
@@ -50,7 +53,22 @@ namespace AspNetCoreTodo.Controllers
             };
             return View(model);
         }
+        /// <summary>
+        /// Indexes the specified item.
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult Index(TodoItem item)
+        {
+            return View(item);
+        }
 
+        /// <summary>
+        /// Adds the item.
+        /// </summary>
+        /// <param name="newItem">The new item.</param>
+        /// <returns></returns>
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddItem(TodoItem newItem)
         {

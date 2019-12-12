@@ -1,7 +1,17 @@
 ﻿@model TodoItem
     
     <form asp-action="AddItem" method="POST">
-        <label asp-for="Title">Add a new item:</label>
+        @*<label asp-for="Title">Add a new item:</label>
         <input asp-for="Title">
-        <button type="submit">Add</button>
+        <label asp-for="DueAt">Add a date</label>
+        <input asp-for="DueAt" />
+        <input type="submit" value="submit" />*@
+
+        @using (Html.BeginForm())
+        {      
+        @Html.EditorFor(TodoItem => TodoItem.Title)
+        @Html.EditorFor(TodoItem => TodoItem.DueAt)
+        <br />
+        <input type="submit" value="submit" />
+        }
     </form>
