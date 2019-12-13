@@ -31,7 +31,7 @@ namespace AspNetCoreTodo.Controllers
         /// </summary>
         private readonly ITodoItemService _todoItemService;
 
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<IdentityUser> _userManager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TodoController"/> class.
@@ -41,9 +41,10 @@ namespace AspNetCoreTodo.Controllers
         /// </summary>
         /// <param name="todoItemService">The todo item service.</param>
         public TodoController(ITodoItemService todoItemService,
-            UserManager<ApplicationUser> userManager)
+            UserManager<IdentityUser> userManager)
         {
             _todoItemService = todoItemService;
+            _userManager = userManager;
         }
 
         /// <summary>
@@ -52,8 +53,12 @@ namespace AspNetCoreTodo.Controllers
         /// <returns></returns>
         public async Task<IActionResult> Index()
         {
-            var items = await _todoItemService.GetIncompleteItemsAsync();
-           
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            if (currentUser == null) return Challenge();
+
+            var items = await _todoItemService.GetIncompleteItemsAsync(currentUser);
+
             var model = new TodoViewModel()
             {
                 Items = items
@@ -83,7 +88,11 @@ namespace AspNetCoreTodo.Controllers
             {
                 return RedirectToAction("Index");
             }
-            var successful = await _todoItemService.AddItemAsync(newItem);
+
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            if (currentUser == null) return Challenge();
+            var successful = await _todoItemService.AddItemAsync(newItem, currentUser );
 
             if (!successful)
             {
@@ -91,6 +100,7 @@ namespace AspNetCoreTodo.Controllers
             }
             return RedirectToAction("Index");
         }
+
         /// <summary>
         /// Marks the done.
         /// Since you aren't using model binding, there's no ModelState to check for
@@ -108,7 +118,9 @@ namespace AspNetCoreTodo.Controllers
             {
                 return RedirectToAction("Index");
             }
-            var successful = await _todoItemService.MarkDoneAsync(id);
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            var successful = await _todoItemService.MarkDoneAsync(id, currentUser);
             if (!successful)
             {
                 return BadRequest("couldnt load a shit");

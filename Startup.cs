@@ -29,8 +29,7 @@ namespace AspNetCoreTodo
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
-            //Esta linea le dice a ASP.NET Core que se use siempre FakeTodoItemService
-            // siempre que la interfaz sea requerida en el contructor.
+
             services.AddScoped<ITodoItemService, TodoItemService>();
         }
 

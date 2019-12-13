@@ -43,5 +43,14 @@ namespace AspNetCoreTodo.Models
         /// </value>
         [UIHint("DTO")]
         public DateTimeOffset? DueAt { get; set; }
+
+        /// <summary>
+        /// Gets or sets the user identifier. Esta propiedad es añadida a la tabla TodoItem para así cada item pueda
+        /// ser recordado.
+        /// </summary>
+        /// <value>
+        /// The user identifier.
+        /// </value>
+        public string UserId { get; set; }
     }
 }
